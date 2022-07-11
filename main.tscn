@@ -1,6 +1,7 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://Player.gd" type="Script" id=1]
+[ext_resource path="res://Assets/testlevel.glb" type="PackedScene" id=2]
 
 [sub_resource type="CapsuleShape" id=1]
 
@@ -15,8 +16,10 @@ size = Vector3( 20, 2, 20 )
 
 [node name="World" type="Spatial"]
 
+[node name="testlevel" parent="." instance=ExtResource( 2 )]
+
 [node name="Camera" type="Camera" parent="."]
-transform = Transform( 1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 20, 0 )
+transform = Transform( 1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 30, 0 )
 fov = 50.0
 
 [node name="Player" type="KinematicBody" parent="."]
@@ -30,7 +33,7 @@ shape = SubResource( 1 )
 material = SubResource( 4 )
 
 [node name="level" type="Spatial" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 44 )
 
 [node name="StaticBody" type="StaticBody" parent="level"]
 
