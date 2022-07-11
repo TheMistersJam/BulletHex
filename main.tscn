@@ -1,18 +1,7 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=3 format=2]
 
-[ext_resource path="res://Player.gd" type="Script" id=1]
+[ext_resource path="res://Player.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Assets/testlevel.glb" type="PackedScene" id=2]
-
-[sub_resource type="CapsuleShape" id=1]
-
-[sub_resource type="SpatialMaterial" id=4]
-albedo_color = Color( 1, 0, 0, 1 )
-
-[sub_resource type="BoxShape" id=2]
-extents = Vector3( 10, 1, 10 )
-
-[sub_resource type="CubeMesh" id=3]
-size = Vector3( 20, 2, 20 )
 
 [node name="World" type="Spatial"]
 
@@ -22,24 +11,4 @@ size = Vector3( 20, 2, 20 )
 transform = Transform( 1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 30, 0 )
 fov = 50.0
 
-[node name="Player" type="KinematicBody" parent="."]
-transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 6.35163, 0 )
-script = ExtResource( 1 )
-
-[node name="CollisionShape" type="CollisionShape" parent="Player"]
-shape = SubResource( 1 )
-
-[node name="CSGBox" type="CSGBox" parent="Player"]
-material = SubResource( 4 )
-
-[node name="level" type="Spatial" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 44 )
-
-[node name="StaticBody" type="StaticBody" parent="level"]
-
-[node name="CollisionShape" type="CollisionShape" parent="level/StaticBody"]
-shape = SubResource( 2 )
-
-[node name="MeshInstance" type="MeshInstance" parent="level/StaticBody"]
-mesh = SubResource( 3 )
-material/0 = null
+[node name="Player" parent="." instance=ExtResource( 1 )]
