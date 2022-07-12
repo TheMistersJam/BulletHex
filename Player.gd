@@ -8,6 +8,7 @@ const fall_acceleration = 75
 var speed = 400
 var motion = Vector3()
 onready var cam = get_node("/root/World/Camera")
+onready var bulletScene = preload("res://Bullet.tscn")
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -24,10 +25,16 @@ func _process(_delta):
 	var lookat_pos = cam.project_ray_origin(mouse_pos)
 	lookat_pos += cam.project_ray_normal(mouse_pos) * (cam.global_transform.origin.y - global_transform.origin.y )
 	#lookat_pos = get_world().direct_space_state.intersect_ray
-	$an.look_at(Vector3(lookat_pos.x, global_transform.origin.y, lookat_pos.z), Vector3.UP)
+	var aim_look = Vector3(lookat_pos.x, global_transform.origin.y, lookat_pos.z)
+	$an.look_at(aim_look, Vector3.UP)
 	var camrot = $an.rotation_degrees.x
 	#$an.rotation.x -= PI/4
 	#$an.look_at(lookat_pos, Vector3.UP)
+	if Input.is_action_just_pressed("shoot"):
+		var poolya = bulletScene.instance()
+		poolya.global_transform = $an.global_transform
+		add_collision_exception_with(poolya)
+		get_tree().get_root().add_child(poolya)
 
 func _physics_process(delta):
 	var old_y = motion.y
@@ -39,3 +46,5 @@ func _physics_process(delta):
 	motion = move_and_slide(motion, Vector3.UP)
 	
 	
+func is_player():
+	return true
