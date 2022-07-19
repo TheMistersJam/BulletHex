@@ -12,3 +12,6 @@ data_*/
 
 # Ignore some assets
 *.blend[0-9]*
+
+#Personal Project Files
+temp

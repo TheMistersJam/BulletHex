@@ -2,6 +2,7 @@ extends KinematicBody
 
 
 const SPEED = 15
+var damage = 10
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -18,4 +19,8 @@ func _physics_process(delta):
 	var col = move_and_collide(moveVec)
 	if col:
 		if not col.collider.has_method("is_player"):
-			queue_free()
+			if col.collider.has_method("on_hit"):
+				col.collider.on_hit(damage)
+				queue_free()
+			else:
+				queue_free()
