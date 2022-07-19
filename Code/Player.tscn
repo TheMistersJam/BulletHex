@@ -1,12 +1,13 @@
 [gd_scene load_steps=5 format=2]
 
-[ext_resource path="res://Player.gd" type="Script" id=1]
+[ext_resource path="res://Code/Player.gd" type="Script" id=1]
 [ext_resource path="res://OldAssets/aim.png" type="Texture" id=2]
 
 [sub_resource type="CapsuleShape" id=1]
 
 [sub_resource type="SpatialMaterial" id=4]
-albedo_color = Color( 1, 0, 0, 1 )
+flags_transparent = true
+albedo_color = Color( 1, 0, 0, 0.392157 )
 
 [node name="Player" type="KinematicBody"]
 transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 6.35163, 0 )
@@ -23,3 +24,13 @@ offset = Vector2( 0, 20 )
 pixel_size = 0.1
 axis = 1
 texture = ExtResource( 2 )
+
+[node name="InvulnTimer" type="Timer" parent="."]
+one_shot = true
+
+[node name="KnockTimer" type="Timer" parent="."]
+wait_time = 0.1
+one_shot = true
+
+[connection signal="timeout" from="InvulnTimer" to="." method="_on_InvulnTimer_timeout"]
+[connection signal="timeout" from="KnockTimer" to="." method="_on_KnockTimer_timeout"]

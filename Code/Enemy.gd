@@ -12,6 +12,8 @@ func _ready():
 
 func on_hit(damage):
 	hp -= damage
+	$CSGBox.material.flags_transparent = true
+	$FlashTimer.start()
 	if hp <= 0:
 		#probably do something fancier than just deleting itself
 		#var world = get_tree().get_root().get_node("World")
@@ -28,7 +30,14 @@ func on_hit(damage):
 
 func _physics_process(delta):
 	#move_and_slide((pouncePos - position)* speed *delta)
-	var col = move_and_slide(pouncePos* speed *delta)
+	move_and_slide(pouncePos* speed *delta)
+	for col_i in get_slide_count():
+		var col = get_slide_collision(col_i).collider
+		if col.has_method("is_player"):
+			col.get_damaged(1, true, pouncePos.normalized())
+			state = 4
+			$Timer.stop()
+			_on_Timer_timeout()
 
 func _on_Timer_timeout():
 	match state:
@@ -49,7 +58,7 @@ func _on_Timer_timeout():
 		2:
 			#$Sprite.play("walk")
 			#tw.interpolate_property(self, "speed", 0, SPEED_MAX, STATE_TIME, Tween.TRANS_QUART, Tween.EASE_IN_OUT)
-			speed = 5000
+			speed = 2000
 			pouncePos = player.translation - translation
 			pouncePos.y = 0
 			pouncePos = pouncePos.normalized()
@@ -57,7 +66,7 @@ func _on_Timer_timeout():
 			#tim.stop()
 			#anim.play("pounce") #, -1, 0.7)
 			#$SoundAttack.play()
-			tim.set_wait_time(0.4)
+			tim.set_wait_time(0.9)
 			tim.start()
 			state = 3
 		3:
@@ -67,3 +76,13 @@ func _on_Timer_timeout():
 			tim.set_wait_time(0.5)
 			tim.start()
 			state = 0
+		4:
+			pouncePos = pouncePos.normalized()
+			speed = -400
+			tim.set_wait_time(0.2)
+			tim.start()
+			state = 3
+
+
+func _on_FlashTimer_timeout():
+	$CSGBox.material.flags_transparent = false
