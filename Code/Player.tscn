@@ -32,5 +32,14 @@ one_shot = true
 wait_time = 0.1
 one_shot = true
 
+[node name="ReloadTimer" type="Timer" parent="."]
+one_shot = true
+
+[node name="DodgeTimer" type="Timer" parent="."]
+wait_time = 0.5
+one_shot = true
+
 [connection signal="timeout" from="InvulnTimer" to="." method="_on_InvulnTimer_timeout"]
 [connection signal="timeout" from="KnockTimer" to="." method="_on_KnockTimer_timeout"]
+[connection signal="timeout" from="ReloadTimer" to="." method="_on_ReloadTimer_timeout"]
+[connection signal="timeout" from="DodgeTimer" to="." method="_on_DodgeTimer_timeout"]

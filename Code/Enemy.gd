@@ -34,10 +34,12 @@ func _physics_process(delta):
 	for col_i in get_slide_count():
 		var col = get_slide_collision(col_i).collider
 		if col.has_method("is_player"):
-			col.get_damaged(1, true, pouncePos.normalized())
-			state = 4
-			$Timer.stop()
-			_on_Timer_timeout()
+			if col.get_damaged(1, true, pouncePos.normalized()):
+				#This sucks, the model still slides against the player even if knockback is not applied and its not good
+				#Maybe do some collision masks or something
+				state = 4
+				$Timer.stop()
+				_on_Timer_timeout()
 
 func _on_Timer_timeout():
 	match state:

@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=2]
+[gd_scene load_steps=17 format=2]
 
 [ext_resource path="res://OldAssets/health.png" type="Texture" id=1]
 [ext_resource path="res://OldAssets/ammo_counter.png" type="Texture" id=2]
@@ -59,6 +59,13 @@ animations = [ {
 "speed": 5.0
 } ]
 
+[sub_resource type="DynamicFontData" id=14]
+font_path = "res://OldAssets/joystix monospace.ttf"
+
+[sub_resource type="DynamicFont" id=13]
+size = 40
+font_data = SubResource( 14 )
+
 [node name="HUD" type="Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -73,3 +80,8 @@ frame = 3
 position = Vector2( 968, 544 )
 scale = Vector2( 3, 3 )
 frames = SubResource( 12 )
+
+[node name="DebugText" type="RichTextLabel" parent="."]
+margin_right = 832.0
+margin_bottom = 160.0
+custom_fonts/normal_font = SubResource( 13 )
