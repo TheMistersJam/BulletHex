@@ -40,6 +40,7 @@ func _physics_process(delta):
 				state = 4
 				$Timer.stop()
 				_on_Timer_timeout()
+	move_and_slide(Vector3(0, -1, 0)*delta*1000)
 
 func _on_Timer_timeout():
 	match state:
