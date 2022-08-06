@@ -83,11 +83,6 @@ _global_script_classes=[ {
 "class": "PackedSceneGLTF",
 "language": "NativeScript",
 "path": "res://addons/godot_gltf/PackedSceneGLTF.gdns"
-}, {
-"base": "Spatial",
-"class": "VRMTopLevel",
-"language": "GDScript",
-"path": "res://addons/vrm/vrm_toplevel.gd"
 } ]
 _global_script_class_icons={
 "EditorSceneImporterGLTF": "",
@@ -104,8 +99,7 @@ _global_script_class_icons={
 "GLTFSpecGloss": "",
 "GLTFState": "",
 "GLTFTexture": "",
-"PackedSceneGLTF": "",
-"VRMTopLevel": ""
+"PackedSceneGLTF": ""
 }
 
 [application]
