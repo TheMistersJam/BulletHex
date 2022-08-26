@@ -4,7 +4,8 @@ extends KinematicBody
 const fall_acceleration = 75
 var speed = 600
 var motion = Vector3()
-var health = 3
+var max_health = 3
+var health = max_health
 var bullets = 6
 var invuln = false
 var is_reload = false
@@ -14,6 +15,7 @@ onready var bul_sp = get_node("/root/World/HUD/Bullets")
 onready var cam = get_node("/root/World/Camera")
 onready var debug_text = get_node("/root/World/HUD/DebugText")
 onready var bulletScene = preload("res://Code/Bullet.tscn")
+onready var world = get_node("/root/World")
 
 var knock_dir = Vector3()
 
@@ -85,6 +87,7 @@ func _physics_process(delta):
 		Input.get_action_strength("ui_down") - Input.get_action_strength("ui_up"))
 		motion = motion.normalized() * delta * speed
 	motion.y = old_y - fall_acceleration * delta
+	motion *= world.timescale
 	motion = move_and_slide(motion + knock_dir, Vector3.UP)
 	
 	

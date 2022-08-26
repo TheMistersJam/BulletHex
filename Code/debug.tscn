@@ -24,8 +24,14 @@ resizable = true
 mode = 0
 access = 2
 filters = PoolStringArray( "*.gltf", "*.glb" )
-current_dir = "/home/fenteale/Projects/BulletHex"
-current_path = "/home/fenteale/Projects/BulletHex/"
+
+[node name="Button2" type="Button" parent="."]
+margin_left = 409.0
+margin_top = 335.0
+margin_right = 599.0
+margin_bottom = 384.0
+text = "Load Test Map"
 
 [connection signal="pressed" from="Button" to="." method="_on_Button_pressed"]
 [connection signal="file_selected" from="fd" to="." method="_on_fd_file_selected"]
+[connection signal="pressed" from="Button2" to="." method="_on_testmap_pressed"]

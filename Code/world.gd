@@ -1,7 +1,41 @@
 extends Spatial
 
+var timescale
+
+const SLOW_PERIOD = 0.3
+const SLOW_AMP = 0.8
+
+var time_set
+var isSlowing
+var powerup_inst = preload("res://Code/Powerup.tscn")
+var enem_count = 0
+
 func _ready():
-	pass
+	time_set = SLOW_PERIOD
+	isSlowing = false
+	timescale = 1.0
+
+#ramps up from 0 to a, then back to 0 in the time of b	
+func time_tween1(x, a, b): #x is pos, a is amplitude, b is period
+	return ((a*0.5)*sin(((2*x/b)-0.5)*PI))+(a*0.5)
+
+#starts at a, then goes to 0 in the time of b	
+func time_tween2(x, a, b): #x is pos, a is amplitude, b is period
+	return ((a*0.5)*sin(((x/b)+0.5)*PI))+(a*0.5)
+	
+func flash_slow():
+	time_set = 0
+	isSlowing = true
+	
+	
+func _process(delta):
+	if isSlowing:
+		time_set += delta
+		timescale = 1 + time_tween2(time_set, -SLOW_AMP, SLOW_PERIOD)
+		if time_set > SLOW_PERIOD:
+			time_set = SLOW_PERIOD
+			timescale = 1.0
+			isSlowing = false
 
 func load_level(path):
 	#var importer = PackedSceneGLTF.new()
@@ -34,6 +68,7 @@ func parse_level(l):
 			var ne = e_ent.instance()
 			ne.translation = _i.translation
 			add_child(ne)
+			enem_count += 1
 		elif p_rx.search(_i.name):
 			print_debug("Found player in ", _i.name)
 			var np = p_ent.instance()
@@ -48,3 +83,14 @@ func parse_level(l):
 			nc.fov = 50
 			nc.name = "Camera"
 			add_child(nc)
+
+func remove_enemy():
+	enem_count -= 1
+	if enem_count <= 0:
+		spawn_powerups()
+
+func spawn_powerups():
+	print_debug("Spawning powerups...")
+	var newp = powerup_inst.instance()
+	newp.translate(Vector3(1, 1, 1))
+	add_child(newp)

@@ -25,3 +25,7 @@ func _deferred_load_world(level_to_load):
 	get_tree().set_current_scene(world_i)
 	
 	queue_free()
+
+
+func _on_testmap_pressed():
+	goto_world("res://Assets/testlevel.glb")

@@ -6,6 +6,7 @@ var speed = 100
 onready var tim = $Timer
 var pouncePos = Vector3()
 onready var player = get_tree().get_root().get_node("World/Player")
+onready var world = get_tree().get_root().get_node("World")
 
 func _ready():
 	pass
@@ -13,6 +14,7 @@ func _ready():
 func on_hit(damage):
 	hp -= damage
 	$CSGBox.material.flags_transparent = true
+	world.flash_slow()
 	$FlashTimer.start()
 	if hp <= 0:
 		#probably do something fancier than just deleting itself
@@ -26,11 +28,12 @@ func on_hit(damage):
 		#world.add_child(dieSound)
 		#dieSound.position = position
 		#dieSound.play()
+		world.remove_enemy()
 		queue_free()
 
 func _physics_process(delta):
 	#move_and_slide((pouncePos - position)* speed *delta)
-	move_and_slide(pouncePos* speed *delta)
+	move_and_slide(pouncePos* speed *delta * world.timescale)
 	for col_i in get_slide_count():
 		var col = get_slide_collision(col_i).collider
 		if col.has_method("is_player"):
@@ -40,7 +43,7 @@ func _physics_process(delta):
 				state = 4
 				$Timer.stop()
 				_on_Timer_timeout()
-	move_and_slide(Vector3(0, -1, 0)*delta*1000)
+	move_and_slide(Vector3(0, -1, 0)*delta * world.timescale *1000)
 
 func _on_Timer_timeout():
 	match state:

@@ -3,6 +3,7 @@ extends KinematicBody
 
 const SPEED = 15
 var damage = 10
+onready var world = get_node("/root/World")
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -15,7 +16,7 @@ func _ready():
 
 func _physics_process(delta):
 	var moveVec = Vector3(sin(rotation.y + PI), 0, cos(rotation.y + PI))
-	moveVec = moveVec.normalized() * SPEED * delta
+	moveVec = moveVec.normalized() * SPEED * delta * world.timescale
 	var col = move_and_collide(moveVec)
 	if col:
 		if not col.collider.has_method("is_player"):
