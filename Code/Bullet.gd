@@ -21,7 +21,7 @@ func _physics_process(delta):
 	if col:
 		if not col.collider.has_method("is_player"):
 			if col.collider.has_method("on_hit"):
-				col.collider.on_hit(damage)
+				col.collider.on_hit(damage, moveVec)
 				queue_free()
 			else:
 				queue_free()

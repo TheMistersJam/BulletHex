@@ -7,14 +7,29 @@ onready var tim = $Timer
 var pouncePos = Vector3()
 onready var player = get_tree().get_root().get_node("World/Player")
 onready var world = get_tree().get_root().get_node("World")
+onready var cmod = $CSGBox
+var t = 0
+var isShake = false
+var hitDir_l
 
 func _ready():
 	pass
 
-func on_hit(damage):
+func shakeTween(x, a, b, c):
+	return a*(exp(-c*x))*(cos(b*x))
+
+func local_shake(hitDir):
+	hitDir_l = hitDir.normalized()
+	$Timer.paused = true
+	isShake = true
+	$Tween.interpolate_property(self, "t", 0, 0.2, 0.2, Tween.TRANS_LINEAR)
+	$Tween.start()
+
+func on_hit(damage, hitDir):
 	hp -= damage
 	$CSGBox.material.flags_transparent = true
-	world.flash_slow()
+	#world.flash_slow() #TODO: replace with local flash slow
+	local_shake(hitDir)
 	$FlashTimer.start()
 	if hp <= 0:
 		#probably do something fancier than just deleting itself
@@ -31,19 +46,24 @@ func on_hit(damage):
 		world.remove_enemy()
 		queue_free()
 
+func _process(delta):
+	if isShake:
+		cmod.translation = hitDir_l*shakeTween(t, 0.4, 70, 1) #need to make these const
+
 func _physics_process(delta):
 	#move_and_slide((pouncePos - position)* speed *delta)
-	move_and_slide(pouncePos* speed *delta * world.timescale)
-	for col_i in get_slide_count():
-		var col = get_slide_collision(col_i).collider
-		if col.has_method("is_player"):
-			if col.get_damaged(1, true, pouncePos.normalized()):
-				#This sucks, the model still slides against the player even if knockback is not applied and its not good
-				#Maybe do some collision masks or something
-				state = 4
-				$Timer.stop()
-				_on_Timer_timeout()
-	move_and_slide(Vector3(0, -1, 0)*delta * world.timescale *1000)
+	if not isShake:
+		move_and_slide(pouncePos* speed *delta * world.timescale)
+		for col_i in get_slide_count():
+			var col = get_slide_collision(col_i).collider
+			if col.has_method("is_player"):
+				if col.get_damaged(1, true, pouncePos.normalized()):
+					#This sucks, the model still slides against the player even if knockback is not applied and its not good
+					#Maybe do some collision masks or something
+					state = 4
+					$Timer.stop()
+					_on_Timer_timeout()
+		move_and_slide(Vector3(0, -1, 0)*delta * world.timescale *1000)
 
 func _on_Timer_timeout():
 	match state:
@@ -92,3 +112,10 @@ func _on_Timer_timeout():
 
 func _on_FlashTimer_timeout():
 	$CSGBox.material.flags_transparent = false
+
+
+func _on_Tween_tween_all_completed():
+	t = 0
+	cmod.translation = Vector3.ZERO
+	isShake = false
+	$Timer.paused = false

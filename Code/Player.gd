@@ -20,7 +20,7 @@ onready var world = get_node("/root/World")
 var knock_dir = Vector3()
 
 func _ready():
-	$CSGBox.material.flags_transparent = false
+	#$model.material.flags_transparent = false #TODO
 	hp_sp.set_frame(health)
 	bul_sp.set_frame(bullets)
 	motion = Vector3.ZERO
@@ -32,7 +32,7 @@ func get_damaged(damage,knock=false,knock_vec=null):
 		if knock:
 			knock_dir = damage * knock_vec * 30
 			$KnockTimer.start()
-		$CSGBox.material.flags_transparent = true
+		#$model.material.flags_transparent = true
 		invuln = true
 		$InvulnTimer.start()
 		return true
@@ -96,7 +96,7 @@ func is_player():
 
 
 func _on_InvulnTimer_timeout():
-	$CSGBox.material.flags_transparent = false
+	#$model.material.flags_transparent = false
 	invuln = false
 
 func _on_KnockTimer_timeout():
